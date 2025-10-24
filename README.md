@@ -37,8 +37,14 @@ This project uses GitHub Actions for continuous integration and deployment:
 │   │   └── ci-cd.yml          # Main CI/CD pipeline
 │   └── CODEOWNERS             # Code ownership and review requirements
 ├── SETUP.md                   # Detailed setup instructions
+├── TEST_BRANCH_GUIDE.md       # Test branch usage guide
 └── README.md                  # This file
 ```
+
+## 🌿 Branch Strategy
+
+- **`main`** - Production branch (PR required, owners only)
+- **`test`** - Open development branch (anyone can push, no restrictions)
 
 ## 🔧 Pipeline Jobs
 
@@ -52,6 +58,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 
 - **[START_HERE.md](START_HERE.md)** - Getting started guide (read this first!)
 - **[TEAM_CONFIGURATION.md](TEAM_CONFIGURATION.md)** - Team members & access control details
+- **[TEST_BRANCH_GUIDE.md](TEST_BRANCH_GUIDE.md)** - How to use the open test branch
 - **[SETUP.md](SETUP.md)** - Complete setup guide with step-by-step instructions
 - **[QUICK_START.md](QUICK_START.md)** - 5-minute quick setup
 - **[CODEOWNERS](.github/CODEOWNERS)** - Code ownership configuration
@@ -65,6 +72,7 @@ This project uses GitHub Actions for continuous integration and deployment:
 - ✅ Code owner approval requirement
 - ✅ No force pushes allowed
 - ✅ Automatic PR conflict resolution required
+- ✅ Open `test` branch for experimentation
 
 ## 🤝 Contributing
 
