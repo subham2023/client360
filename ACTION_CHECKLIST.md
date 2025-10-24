@@ -79,7 +79,7 @@ No verification needed - proceed to Phase 2!
 - [ ] Run: `git commit -m "Add CI/CD pipeline with access controls"`
 - [ ] Run: `git branch -M main`
 - [ ] Create new repository on GitHub (if not exists)
-- [ ] Run: `git remote add origin https://github.com/subham2023/client-360.git`
+- [ ] Run: `git remote add origin https://github.com/subham2023/client360.git`
 - [ ] Run: `git push -u origin main`
 - [ ] Verify push was successful
 

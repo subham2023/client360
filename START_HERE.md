@@ -156,7 +156,7 @@ git init
 git add .
 git commit -m "Add CI/CD pipeline with configured team"
 git branch -M main
-git remote add origin https://github.com/subham2023/client-360.git
+git remote add origin https://github.com/subham2023/client360.git
 git push -u origin main
 ```
 

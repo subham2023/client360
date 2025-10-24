@@ -191,8 +191,8 @@ git push origin main
 #### Required Workflow:
 ```bash
 # 1. Clone repository (first time)
-git clone https://github.com/subham2023/client-360.git
-cd client-360
+git clone https://github.com/subham2023/client360.git
+cd client360
 
 # 2. Create feature branch from main
 git checkout main
@@ -264,10 +264,10 @@ git push origin feature/my-feature
 
 ## 🔄 Repository Information
 
-- **Repository Name**: client-360
-- **Repository URL**: https://github.com/subham2023/client-360
+- **Repository Name**: client360
+- **Repository URL**: https://github.com/subham2023/client360
 - **Main Branch**: `main`
-- **Clone URL**: `git clone https://github.com/subham2023/client-360.git`
+- **Clone URL**: `git clone https://github.com/subham2023/client360.git`
 
 ---
 

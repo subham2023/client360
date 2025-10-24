@@ -37,7 +37,7 @@ You can proceed directly to Step 2!
 3. **Push to GitHub:**
    ```bash
    git branch -M main
-   git remote add origin https://github.com/subham2023/client-360.git
+   git remote add origin https://github.com/subham2023/client360.git
    git push -u origin main
    ```
 

@@ -77,13 +77,13 @@ git init
 git add .
 git commit -m "Add CI/CD pipeline with team configuration"
 git branch -M main
-git remote add origin https://github.com/subham2023/client-360.git
+git remote add origin https://github.com/subham2023/client360.git
 git push -u origin main
 ```
 
 ### 3️⃣ Configure Branch Protection (5 minutes)
 
-1. Go to: https://github.com/subham2023/client-360/settings/branches
+1. Go to: https://github.com/subham2023/client360/settings/branches
 2. Click "Add branch protection rule"
 3. Branch name: `main`
 4. Enable these:
@@ -97,7 +97,7 @@ git push -u origin main
 
 ### 4️⃣ Add Collaborators (2 minutes)
 
-1. Go to: https://github.com/subham2023/client-360/settings/access
+1. Go to: https://github.com/subham2023/client360/settings/access
 2. Click "Add people"
 3. Add these users:
    - **@sidhyaashu** → Admin or Write role
@@ -255,7 +255,7 @@ You'll know everything works when:
 ---
 
 **Configuration Date**: October 25, 2025  
-**Repository**: https://github.com/subham2023/client-360  
+**Repository**: https://github.com/subham2023/client360  
 **Status**: ✅ **READY TO DEPLOY**
 
 ---
@@ -280,7 +280,7 @@ git commit -m "Add CI/CD pipeline for Client 360
 - PR automation with auto-labeling"
 
 git branch -M main
-git remote add origin https://github.com/subham2023/client-360.git
+git remote add origin https://github.com/subham2023/client360.git
 git push -u origin main
 ```
 
