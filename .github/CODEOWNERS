@@ -1,0 +1,25 @@
+# CODEOWNERS file
+# This file defines who owns the code and who can approve changes
+# 
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+# These users will be automatically requested for review when anyone opens a pull request
+*       @subham2023 @sidhyaashu
+
+# Protect critical files - require review from both allowed users
+/.github/       @subham2023 @sidhyaashu
+/package.json   @subham2023 @sidhyaashu
+/requirements.txt @subham2023 @sidhyaashu
+/.env*          @subham2023 @sidhyaashu
+/docker-compose.yml @subham2023 @sidhyaashu
+
+# Example: Specific directories or files
+# /src/auth/     @subham2023
+# /src/api/      @sidhyaashu
+# /docs/         @subham2023 @sidhyaashu
+# *.sql          @subham2023
+
+# Note: CODEOWNERS automatically requires approval from the specified users
+# when anyone (including restricted users) opens a pull request
+

@@ -1,0 +1,80 @@
+# Configuration for PR Labeler
+# Automatically label pull requests based on changed files
+
+# Documentation
+documentation:
+  - '**/*.md'
+  - 'docs/**/*'
+
+# Configuration files
+config:
+  - '*.json'
+  - '*.yml'
+  - '*.yaml'
+  - '*.toml'
+  - '*.config.js'
+  - '.github/**/*'
+
+# CI/CD
+ci-cd:
+  - '.github/workflows/**/*'
+  - '.gitlab-ci.yml'
+  - 'azure-pipelines.yml'
+  - 'Jenkinsfile'
+
+# Dependencies
+dependencies:
+  - 'package.json'
+  - 'package-lock.json'
+  - 'yarn.lock'
+  - 'pnpm-lock.yaml'
+  - 'requirements.txt'
+  - 'Pipfile'
+  - 'Pipfile.lock'
+  - 'go.mod'
+  - 'go.sum'
+  - 'Gemfile'
+  - 'Gemfile.lock'
+
+# Frontend
+frontend:
+  - 'src/**/*.{js,jsx,ts,tsx,vue,svelte}'
+  - 'public/**/*'
+  - 'static/**/*'
+  - '**/*.css'
+  - '**/*.scss'
+  - '**/*.sass'
+  - '**/*.less'
+
+# Backend
+backend:
+  - 'server/**/*'
+  - 'api/**/*'
+  - 'backend/**/*'
+  - '**/*.py'
+  - '**/*.go'
+  - '**/*.java'
+  - '**/*.rb'
+  - '**/*.php'
+
+# Database
+database:
+  - '**/*.sql'
+  - 'migrations/**/*'
+  - 'prisma/**/*'
+  - 'models/**/*'
+
+# Tests
+tests:
+  - '**/*.test.{js,jsx,ts,tsx}'
+  - '**/*.spec.{js,jsx,ts,tsx}'
+  - 'test/**/*'
+  - 'tests/**/*'
+  - '__tests__/**/*'
+
+# Docker
+docker:
+  - 'Dockerfile*'
+  - 'docker-compose*.yml'
+  - '.dockerignore'
+

@@ -1,0 +1,273 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Environment variables - customize these based on your project
+env:
+  NODE_VERSION: '18'  # Change if using Node.js
+  PYTHON_VERSION: '3.11'  # Change if using Python
+
+jobs:
+  # Job 1: Install Dependencies
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # For Node.js/JavaScript projects
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'  # Use 'yarn' or 'pnpm' if applicable
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      - name: Install Node dependencies
+        run: npm ci
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      # For Python projects
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+        # Uncomment if your project uses Python
+        # if: hashFiles('requirements.txt') != ''
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        # Uncomment if your project uses Python
+        # if: hashFiles('requirements.txt') != ''
+
+      # Cache dependencies for subsequent jobs
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/pip
+            ~/.npm
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package-lock.json', '**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+  # Job 2: Lint Code (Optional but recommended)
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    needs: install
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/pip
+            ~/.npm
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package-lock.json', '**/requirements.txt') }}
+
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true  # Set to false to make linting required
+        # Uncomment if your project uses Node.js with ESLint
+        # if: hashFiles('package.json') != ''
+
+      - name: Run Flake8
+        run: flake8 .
+        continue-on-error: true
+        # Uncomment if your project uses Python
+        # if: hashFiles('requirements.txt') != ''
+
+  # Job 3: Run Tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: install
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+        # Uncomment if your project uses Python
+        # if: hashFiles('requirements.txt') != ''
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/pip
+            ~/.npm
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package-lock.json', '**/requirements.txt') }}
+
+      - name: Run Node.js tests
+        run: npm test
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      - name: Run Python tests
+        run: pytest
+        # Uncomment if your project uses Python
+        # if: hashFiles('requirements.txt') != ''
+
+      # Upload test coverage reports (optional)
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Job 4: Build Project
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/pip
+            ~/.npm
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/package-lock.json', '**/requirements.txt') }}
+
+      - name: Build application
+        run: npm run build
+        # Uncomment if your project uses Node.js
+        # if: hashFiles('package.json') != ''
+
+      # Upload build artifacts
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            dist/
+            build/
+            out/
+          retention-days: 7
+
+  # Job 5: Deploy (only on main branch)
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: ./build
+
+      # Example deployment to Vercel (customize based on your hosting)
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          echo "Deploying to production..."
+          # npm install -g vercel
+          # vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          # Add other deployment secrets as needed
+
+      # Example deployment to AWS S3
+      # - name: Deploy to AWS S3
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: us-east-1
+      # 
+      # - name: Sync to S3
+      #   run: aws s3 sync ./build s3://your-bucket-name --delete
+
+      # Example deployment to Heroku
+      # - name: Deploy to Heroku
+      #   uses: akhileshns/heroku-deploy@v3.13.15
+      #   with:
+      #     heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+      #     heroku_app_name: "your-app-name"
+      #     heroku_email: "your-email@example.com"
+
+      - name: Deployment successful
+        run: echo "✅ Deployment completed successfully!"
+
+  # Job 6: Notify on failure (optional)
+  notify-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: [lint, test, build, deploy]
+    if: failure()
+    
+    steps:
+      - name: Send notification
+        run: |
+          echo "⚠️ Pipeline failed! Check the logs for details."
+          # Add notification integrations here (Slack, Discord, Email, etc.)
+          # Example for Slack:
+          # curl -X POST -H 'Content-type: application/json' \
+          #   --data '{"text":"CI/CD Pipeline Failed!"}' \
+          #   ${{ secrets.SLACK_WEBHOOK_URL }}
+
